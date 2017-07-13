@@ -1,17 +1,12 @@
 package org.hqu.production_ms.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.hqu.production_ms.domain.Process;
-import org.hqu.production_ms.domain.custom.ActiveUser;
-import org.hqu.production_ms.domain.custom.CustomResult;
-import org.hqu.production_ms.domain.custom.EUDataGridResult;
+import org.hqu.production_ms.domain.customize.CustomResult;
+import org.hqu.production_ms.domain.customize.EUDataGridResult;
 import org.hqu.production_ms.service.ProcessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/process")
 public class ProcessController {
-	
+
 	@Autowired
 	private ProcessService processService;
 	
@@ -41,47 +36,9 @@ public class ProcessController {
 		return "process_list";
 	}
 	
-	@RequestMapping("/add_judge")
-	@ResponseBody
-	public Map<String,Object> processAddJudge() throws Exception{
-		//从shiro的session中取activeUser
-		Subject subject = SecurityUtils.getSubject();
-		//取身份信息
-		ActiveUser activeUser = (ActiveUser) subject.getPrincipal();
-		Map<String,Object> map = new HashMap<String,Object>(); 
-		if(!activeUser.getUserStatus().equals("1")){
-			map.put("msg", "您的账户已被锁定，请切换账户登录！");
-		}else if(!activeUser.getRoleStatus().equals("1")){
-			map.put("msg", "当前角色已被锁定，请切换账户登录！");
-		}else{
-			if(!subject.isPermitted("process:add")){
-				map.put("msg", "您没有权限，请切换用户登录！");
-			}
-		}
-		return map;
-	}
-	
 	@RequestMapping("/add")
 	public String add() throws Exception{
 		return "process_add";
-	}
-	
-	@RequestMapping("/edit_judge")
-	@ResponseBody
-	public Map<String,Object> processEditJudge() throws Exception{
-		Subject subject = SecurityUtils.getSubject();
-		ActiveUser activeUser = (ActiveUser) subject.getPrincipal();
-		Map<String,Object> map = new HashMap<String,Object>();
-		if(!activeUser.getUserStatus().equals("1")){
-			map.put("msg", "您的账户已被锁定，请切换账户登录！");
-		}else if(!activeUser.getRoleStatus().equals("1")){
-			map.put("msg", "当前角色已被锁定，请切换账户登录！");
-		}else{
-			if(!subject.isPermitted("process:edit")){
-				map.put("msg", "您没有权限，请切换用户登录！");
-			}
-		}
-		return map;
 	}
 	
 	@RequestMapping("/edit")
@@ -95,8 +52,7 @@ public class ProcessController {
 		List<Process> list = processService.find();
 		return list;
 	}
-	
-	
+
 	@RequestMapping("/list")
 	@ResponseBody
 	public EUDataGridResult getItemList(Integer page, Integer rows, Process process) throws Exception{
@@ -130,23 +86,6 @@ public class ProcessController {
 		return processService.updateAll(process);
 	}
 	
-	@RequestMapping("/delete_judge")
-	@ResponseBody
-	public Map<String,Object> processDeleteJudge() throws Exception{
-		Subject subject = SecurityUtils.getSubject();
-		ActiveUser activeUser = (ActiveUser) subject.getPrincipal();
-		Map<String,Object> map = new HashMap<String,Object>();
-		if(!activeUser.getUserStatus().equals("1")){
-			map.put("msg", "您的账户已被锁定，请切换账户登录！");
-		}else if(!activeUser.getRoleStatus().equals("1")){
-			map.put("msg", "当前角色已被锁定，请切换账户登录！");
-			if(!subject.isPermitted("process:delete")){
-				map.put("msg", "您没有权限，请切换用户登录！");
-			}
-		}
-		return map;
-	}
-
 	@RequestMapping(value="/delete_batch")
 	@ResponseBody
 	private CustomResult deleteBatch(String[] ids) throws Exception {
@@ -154,16 +93,15 @@ public class ProcessController {
 		return result;
 	}
 	
-	//搜索
+	//根据工序id查找
 	@RequestMapping("/search_process_by_processId")
 	@ResponseBody
-	public EUDataGridResult searchProcessByProcessId(Integer page, Integer rows, String searchValue) 
-			throws Exception{
+	public EUDataGridResult searchProcessByProcessId(Integer page, Integer rows, String searchValue) throws Exception{
 		EUDataGridResult result = processService.searchProcessByProcessId(page, rows, searchValue);
 		return result;
 	}
 	
-	//搜索
+	//根据工序计划id查找
 	@RequestMapping("/search_process_by_technologyPlanId")
 	@ResponseBody
 	public EUDataGridResult searchProcessByTechnologyPlanId(Integer page, Integer rows, String searchValue)

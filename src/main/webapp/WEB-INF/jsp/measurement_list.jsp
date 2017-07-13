@@ -4,8 +4,9 @@
 <script type="text/javascript" charset="utf-8" src="js/kindeditor-4.1.10/kindeditor-all-min.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/kindeditor-4.1.10/lang/zh_CN.js"></script>
 
-<table  id="measureList" title="成品计量质检" class="easyui-datagrid"
-       data-options="singleSelect:false,collapsible:true,pagination:true,rownumbers:true,url:'measure/list',method:'get',pageSize:10,fitColumns:true,toolbar:toolbar_fMeasureCheck">
+<table  id="measureList" title="成品计量质检" class="easyui-datagrid" data-options="singleSelect:false,collapsible:true,
+		pagination:true,rownumbers:true,url:'measure/list',method:'get',pageSize:10,fitColumns:true,
+		toolbar:toolbar_fMeasureCheck">
     <thead>
         <tr>
             <th data-options="field:'ck',checkbox:true"></th>
@@ -28,17 +29,23 @@
 	<c:forEach items="${sessionScope.sysPermissionList}" var="per" >
 		<c:if test="${per=='fMeasureCheck:add' }" >
 		    <div style="float: left;">  
-		        <a href="#" class="easyui-linkbutton" plain="true" icon="icon-add" onclick="fMeasureCheck_add()">新增</a>  
+		        <a href="#" class="easyui-linkbutton" plain="true" icon="icon-add" onclick="fMeasureCheck_add()">
+					新增
+				</a>
 		    </div>  
 		</c:if>
 		<c:if test="${per=='fMeasureCheck:edit' }" >
 		    <div style="float: left;">  
-		        <a href="#" class="easyui-linkbutton" plain="true" icon="icon-edit" onclick="fMeasureCheck_edit()">编辑</a>  
+		        <a href="#" class="easyui-linkbutton" plain="true" icon="icon-edit" onclick="fMeasureCheck_edit()">
+					编辑
+				</a>
 		    </div>  
 		</c:if>
 		<c:if test="${per=='fMeasureCheck:delete' }" >
 		    <div style="float: left;">  
-		        <a href="#" class="easyui-linkbutton" plain="true" icon="icon-cancel" onclick="fMeasureCheck_delete()">删除</a>  
+		        <a href="#" class="easyui-linkbutton" plain="true" icon="icon-cancel" onclick="fMeasureCheck_delete()">
+					删除
+				</a>
 		    </div>  
 		</c:if>
 	</c:forEach>
@@ -62,48 +69,57 @@
 
 </div>  
 
-<div id="measureEditWindow" class="easyui-window" title="编辑成品计量质检" data-options="modal:true,closed:true,resizable:true,iconCls:'icon-save',href:'measure/edit'" style="width:65%;height:80%;padding:10px;">
+<div id="measureEditWindow" class="easyui-window" title="编辑成品计量质检" data-options="modal:true,closed:true,
+	resizable:true,iconCls:'icon-save',href:'measure/edit'" style="width:65%;height:80%;padding:10px;">
 </div>
-<div id="measureAddWindow" class="easyui-window" title="添加成品计量质检" data-options="modal:true,closed:true,resizable:true,iconCls:'icon-save',href:'measure/add'" style="width:65%;height:80%;padding:10px;">
+<div id="measureAddWindow" class="easyui-window" title="添加成品计量质检" data-options="modal:true,closed:true,
+	resizable:true,iconCls:'icon-save',href:'measure/add'" style="width:65%;height:80%;padding:10px;">
 </div>
 
 <!-- ********************************************************************* -->
-<div id="fMeasureOrderInfo" class="easyui-dialog" title="订单信息" data-options="modal:true,closed:true,resizable:true,iconCls:'icon-save'" style="width:65%;height:80%;padding:10px;">
+<div id="fMeasureOrderInfo" class="easyui-dialog" title="订单信息" data-options="modal:true,closed:true,resizable:true,
+	iconCls:'icon-save'" style="width:65%;height:80%;padding:10px;">
 	<form id="fMeasureOrderEditForm" method="post">
 			<input type="hidden" name="orderId"/>
 	    <table cellpadding="5">
 	         <tr>
 	            <td>订购客户:</td>
 	            <td>
-	            	<input id="custom" class="easyui-combobox" name="customId"   
-    					data-options="required:true,valueField:'customId',textField:'customName',url:'custom/get_data'" />  
+	            	<input id="custom" class="easyui-combobox" name="customId" data-options="required:true,
+	            		valueField:'customId',textField:'customName',url:'custom/get_data'"/>
 	            </td>
 	        </tr>
 	        <tr>
 	            <td>订购产品:</td>
 	            <td>
 	            	<input id="product" class="easyui-combobox" name="productId"   
-    					data-options="valueField:'productId',textField:'productName',url:'product/get_data'" />
+    					data-options="valueField:'productId',textField:'productName',url:'product/get_data'"/>
     			</td>  
 	        </tr>
 	        <tr>
 	            <td>订购数量:</td>
-	            <td><input class="easyui-numberbox" type="text" name="quantity" data-options="min:1,max:99999999,precision:0,required:true" /></td>
+	            <td>
+					<input class="easyui-numberbox" type="text" name="quantity"
+						   data-options="min:1,max:99999999,precision:0,required:true"/>
+				</td>
 	        </tr>
 	        <tr>
 	            <td>税前单价:</td>
-	            <td><input class="easyui-numberbox" type="text" name="unitPrice" data-options="min:1,max:99999999,precision:2,required:true" />
+	            <td>
+					<input class="easyui-numberbox" type="text" name="unitPrice"
+						   data-options="min:1,max:99999999,precision:2,required:true"/>
 	            	<input type="hidden" name="price"/>
 	            </td>
 	        </tr>
 	        <tr>
 	            <td>单位:</td>
-	            <td><input  class="easyui-textbox" type="text" name="unit"></input></td>
+	            <td><input  class="easyui-textbox" type="text" name="unit"/></td>
 	        </tr>
 	        <tr>
 	            <td>订单状态:</td>
 	            <td>
-		            <select id="cc" class="easyui-combobox" name="status" data-options="required:true,width:150, editable:false">
+		            <select id="cc" class="easyui-combobox" name="status" data-options="required:true,width:150,
+		            		editable:false">
 						<option value="1">未开始</option>
 						<option value="2">已开始</option>
 						<option value="3">已完成</option>
@@ -149,18 +165,20 @@
 </div>
 
 <!-- 检验人信息 -->
-<div id="empInfo_fMeasure" class="easyui-dialog" title="检验人信息" data-options="modal:true,closed:true,resizable:true,iconCls:'icon-save'" style="width:33%;height:65%;padding:10px;">
+<div id="empInfo_fMeasure" class="easyui-dialog" title="检验人信息" data-options="modal:true,closed:true,resizable:true,
+		iconCls:'icon-save'" style="width:33%;height:65%;padding:10px;">
 	<form id="empEditForm_fMeasure" method="post">
 		<input type="hidden" name="empId"/>
 	    <table cellpadding="5">
 	        <tr>
 	           	<td>姓名:</td>
-	           	<td><input class="easyui-textbox" name="empName" data-options="editable:false"></input></td>
+	           	<td><input class="easyui-textbox" name="empName" data-options="editable:false"/></td>
 	        </tr>
 	        <tr>
 	            <td>性别:</td>
 	            <td>
-	            	<select id="sexCombobox" class="easyui-combobox" name="sex" panelHeight="auto" data-options="editable:false" style="width:173px">
+	            	<select id="sexCombobox" class="easyui-combobox" name="sex" panelHeight="auto"
+							data-options="editable:false" style="width:173px">
 						<option value="1">男</option>
 						<option value="2">女</option>
 					</select>
@@ -168,43 +186,42 @@
 	        </tr>
 	        <tr>
 	            <td>所属部门:</td>
-	            <!-- <td><input class="easyui-textbox" name="department" data-options="formatter:formatDepartment_test"></input></td> -->
 	            <td>
 	            	<input class="easyui-combobox" name="departmentId" panelHeight="auto"
-    					data-options="valueField:'departmentId',textField:'departmentName',url:'department/get_data'" />
+    					data-options="valueField:'departmentId',textField:'departmentName',url:'department/get_data'"/>
     			</td> 
 	        </tr>
 	        <tr>
 	            <td>身份证号:</td>
-	            <td><input class="easyui-textbox" name="idCode"></input></td>
+	            <td><input class="easyui-textbox" name="idCode"/></td>
 	        </tr>
 	        <tr>
 	            <td>学历:</td>
-	            <td><input class="easyui-textbox" name="education"></input></td>
+	            <td><input class="easyui-textbox" name="education"/></td>
 	        </tr>
 	        <tr>
 	            <td>学位:</td>
-	            <td><input class="easyui-textbox" name="degree"></input></td>
+	            <td><input class="easyui-textbox" name="degree"/></td>
 	        </tr>
 	        <tr>
 	            <td>专业:</td>
-	            <td><input class="easyui-textbox" name="major" ></input></td>
+	            <td><input class="easyui-textbox" name="major"/></td>
 	        </tr>
 	        <tr>
 	            <td>受教育形式:</td>
-	            <td><input class="easyui-textbox" name="educationForm" ></input></td>
+	            <td><input class="easyui-textbox" name="educationForm"/></td>
 	        </tr>
 	        <tr>
 	            <td>生日:</td>
-	            <td><input class="easyui-datetimebox" name="birthday" ></input></td>
+	            <td><input class="easyui-datetimebox" name="birthday"/></td>
 	        </tr>
 	        <tr>
 	            <td>入职日期:</td>
-	            <td><input class="easyui-datetimebox" name="joinDate" ></input></td>
+	            <td><input class="easyui-datetimebox" name="joinDate"/></td>
 	        </tr>
 	        <tr>
 	            <td>员工状态:</td>
-	            <td><input class="easyui-textbox" name="status" ></input></td>
+	            <td><input class="easyui-textbox" name="status"/></td>
 	        </tr>
 	    </table>
 	</form>
@@ -215,7 +232,8 @@
 
 
 <!-- ********************************************************************* -->
-<div id="fMeasureNoteDialog" class="easyui-dialog" title="备注" data-options="modal:true,closed:true,resizable:true,iconCls:'icon-save'" style="width:55%;height:65%;padding:10px">
+<div id="fMeasureNoteDialog" class="easyui-dialog" title="备注" data-options="modal:true,closed:true,resizable:true,
+		iconCls:'icon-save'" style="width:55%;height:65%;padding:10px">
 	<form id="fMeasureNoteForm" class="itemForm" method="post">
 		<input type="hidden" name="fMeasureCheckId"/>
 	    <table cellpadding="5" >
@@ -235,34 +253,36 @@
 function doSearch_fMeasureCheck(value,name){ //用户输入用户名,点击搜素,触发此函数  
 	if(value == null || value == ''){
 		$("#measureList").datagrid({
-	        title:'成品计量质检', singleSelect:false, collapsible:true, pagination:true, rownumbers:true, method:'get', nowrap:true,  
-	        toolbar:"toolbar_fMeasureCheck", url:'measure/list', method:'get', loadMsg:'数据加载中......',  fitColumns:true,//允许表格自动缩放,以适应父容器  
+	        title:'成品计量质检', singleSelect:false, collapsible:true, pagination:true, rownumbers:true, method:'get',
+			nowrap:true, toolbar:"toolbar_fMeasureCheck", url:'measure/list', method:'get', loadMsg:'数据加载中......',
+			fitColumns:true,//允许表格自动缩放,以适应父容器
 	        columns : [ [ 
-	             	{field : 'ck', checkbox:true }, 
-	             	{field : 'fMeasureCheckId', width : 100, title : '成品计量质检编号', align:'center'},
-	             	{field : 'orderId', width : 100, align : 'center', title : '订单编号'},
-	             	{field : 'checkItem', width : 100, align : 'center', title : '检验项目'}, 
-	             	{field : 'cdate', width : 100, title : '检验时间', align:'center',formatter:TAOTAO.formatDateTime}, 
-	             	{field : 'measureData', width : 100, title : '实际测量数据', align:'center'}, 
-	            	{field : 'empName', width : 100, title : '检验人', align:'center',formatter:formatEmp_fMeasure}, 
-	             	{field : 'result', width : 100, title : '检验结果', align:'center'}, 
-	             	{field : 'note', width : 100, title : '备注', align:'center', formatter:formatFMeasureNote} 
+				{field : 'ck', checkbox:true },
+				{field : 'fMeasureCheckId', width : 100, title : '成品计量质检编号', align:'center'},
+				{field : 'orderId', width : 100, align : 'center', title : '订单编号'},
+				{field : 'checkItem', width : 100, align : 'center', title : '检验项目'},
+				{field : 'cdate', width : 100, title : '检验时间', align:'center',formatter:TAOTAO.formatDateTime},
+				{field : 'measureData', width : 100, title : '实际测量数据', align:'center'},
+				{field : 'empName', width : 100, title : '检验人', align:'center',formatter:formatEmp_fMeasure},
+				{field : 'result', width : 100, title : '检验结果', align:'center'},
+				{field : 'note', width : 100, title : '备注', align:'center', formatter:formatFMeasureNote}
 	        ] ],  
 	    });
 	}else{
 		$("#measureList").datagrid({  
-	        title:'成品计量质检', singleSelect:false, collapsible:true, pagination:true, rownumbers:true, method:'get', nowrap:true,  
-	        toolbar:"toolbar_fMeasureCheck", url:'measure/search_fMeasureCheck_by_'+name+'?searchValue='+value, loadMsg:'数据加载中......',  fitColumns:true,//允许表格自动缩放,以适应父容器  
+	        title:'成品计量质检', singleSelect:false, collapsible:true, pagination:true, rownumbers:true, method:'get',
+			nowrap:true, toolbar:"toolbar_fMeasureCheck", url:'measure/search_fMeasureCheck_by_'
+			+name+'?searchValue='+value, loadMsg:'数据加载中......',  fitColumns:true,//允许表格自动缩放,以适应父容器
 	        columns : [ [ 
-	                 	{field : 'ck', checkbox:true }, 
-		             	{field : 'fMeasureCheckId', width : 100, title : '成品计量质检编号', align:'center'},
-		             	{field : 'orderId', width : 100, align : 'center', title : '订单编号'},
-		             	{field : 'checkItem', width : 100, align : 'center', title : '检验项目'}, 
-		             	{field : 'cdate', width : 100, title : '检验时间', align:'center',formatter:TAOTAO.formatDateTime}, 
-		             	{field : 'measureData', width : 100, title : '实际测量数据', align:'center'}, 
-		            	{field : 'empName', width : 100, title : '检验人', align:'center',formatter:formatEmp_fMeasure}, 
-		             	{field : 'result', width : 100, title : '检验结果', align:'center'}, 
-		             	{field : 'note', width : 100, title : '备注', align:'center', formatter:formatFMeasureNote} 
+				{field : 'ck', checkbox:true },
+				{field : 'fMeasureCheckId', width : 100, title : '成品计量质检编号', align:'center'},
+				{field : 'orderId', width : 100, align : 'center', title : '订单编号'},
+				{field : 'checkItem', width : 100, align : 'center', title : '检验项目'},
+				{field : 'cdate', width : 100, title : '检验时间', align:'center',formatter:TAOTAO.formatDateTime},
+				{field : 'measureData', width : 100, title : '实际测量数据', align:'center'},
+				{field : 'empName', width : 100, title : '检验人', align:'center',formatter:formatEmp_fMeasure},
+				{field : 'result', width : 100, title : '检验结果', align:'center'},
+				{field : 'note', width : 100, title : '备注', align:'center', formatter:formatFMeasureNote}
 	        ] ],  
 	    });
 	}
@@ -343,8 +363,8 @@ function doSearch_fMeasureCheck(value,name){ //用户输入用户名,点击搜�
         		var imgs = data.pics.split(",");
         		for(var i in imgs){
         			if($.trim(imgs[i]).length > 0){
-        				_ele.siblings(".pics").find("ul").append("<li><a id='img"+i+"' href='"+imgs[i]+"' target='_blank'>" +
-        						"<img src='"+imgs[i]+"' width='80' height='50' /></a> ");
+        				_ele.siblings(".pics").find("ul").append("<li><a id='img"+i+"' href='"+imgs[i]+"' " +
+								"target='_blank'>" + "<img src='"+imgs[i]+"' width='80' height='50' /></a> ");
         				j = true;
         			}
         		}
@@ -467,7 +487,7 @@ function doSearch_fMeasureCheck(value,name){ //用户输入用户名,点击搜�
 	
 	//更新备注
 	function updateFMeasureNote(){
-		$.get("measure/edit_judge",'',function(data){
+		$.get("fMeasureCheck/edit_judge",'',function(data){
     		if(data.msg != null){
     			$.messager.alert('提示', data.msg);
     		}else{
@@ -498,7 +518,7 @@ function getFMeasureSelectionsIds(){
     
 //////////////////////////////////////////////////////////////////////////
 function fMeasureCheck_add(){
-	$.get("measure/add_judge",'',function(data){
+	$.get("fMeasureCheck/add_judge",'',function(data){
    		if(data.msg != null){
    			$.messager.alert('提示', data.msg);
    		}else{
@@ -508,7 +528,7 @@ function fMeasureCheck_add(){
 }
 
 function fMeasureCheck_edit(){
-	$.get("measure/edit_judge",'',function(data){
+	$.get("fMeasureCheck/edit_judge",'',function(data){
    		if(data.msg != null){
    			$.messager.alert('提示', data.msg);
    		}else{
@@ -537,7 +557,7 @@ function fMeasureCheck_edit(){
 }
 
 function fMeasureCheck_delete(){
-	$.get("measure/delete_judge",'',function(data){
+	$.get("fMeasureCheck/delete_judge",'',function(data){
    		if(data.msg != null){
    			$.messager.alert('提示', data.msg);
    		}else{

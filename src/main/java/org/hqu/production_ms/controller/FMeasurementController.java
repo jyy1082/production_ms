@@ -1,16 +1,11 @@
 package org.hqu.production_ms.controller;
 
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.hqu.production_ms.domain.FinalMeasuretCheck;
-import org.hqu.production_ms.domain.custom.ActiveUser;
-import org.hqu.production_ms.domain.custom.CustomResult;
-import org.hqu.production_ms.domain.custom.EUDataGridResult;
+import org.hqu.production_ms.domain.customize.CustomResult;
+import org.hqu.production_ms.domain.customize.EUDataGridResult;
 import org.hqu.production_ms.service.MeasureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/measure")
 public class FMeasurementController {
-	
+
 	@Autowired
 	private MeasureService measureService;
 	
@@ -61,99 +56,19 @@ public class FMeasurementController {
 		return "measurement_add";
 	}
 	
-	@RequestMapping("/add_judge")
-	@ResponseBody
-	public Map<String,Object> fMeasureCheckAddJudge() throws Exception{
-		//从shiro的session中取activeUser
-		Subject subject = SecurityUtils.getSubject();
-		//取身份信息
-		ActiveUser activeUser = (ActiveUser) subject.getPrincipal();
-		Map<String,Object> map = new HashMap<String,Object>(); 
-		if(!activeUser.getUserStatus().equals("1")){
-			map.put("msg", "您的账户已被锁定，请切换账户登录！");
-		}else if(!activeUser.getRoleStatus().equals("1")){
-			map.put("msg", "当前角色已被锁定，请切换账户登录！");
-		}else{
-			if(!subject.isPermitted("fMeasureCheck:add")){
-				map.put("msg", "您没有权限，请切换用户登录！");
-			}
-		}
-		return map;
-	}
-	
 	@RequestMapping("/edit")
 	public String edit() throws Exception{
 		return "measurement_edit";
 	}
-	
-	@RequestMapping("/edit_judge")
-	@ResponseBody
-	public Map<String,Object> fMeasureCheckEditJudge() throws Exception{
-		Subject subject = SecurityUtils.getSubject();
-		ActiveUser activeUser = (ActiveUser) subject.getPrincipal();
-		Map<String,Object> map = new HashMap<String,Object>();
-		if(!activeUser.getUserStatus().equals("1")){
-			map.put("msg", "您的账户已被锁定，请切换账户登录！");
-		}else if(!activeUser.getRoleStatus().equals("1")){
-			map.put("msg", "当前角色已被锁定，请切换账户登录！");
-		}else{
-			if(!subject.isPermitted("fMeasureCheck:edit")){
-				map.put("msg", "您没有权限，请切换用户登录！");
-			}
-		}
-		return map;
-	}
-	
-	@RequestMapping("/delete_judge")
-	@ResponseBody
-	public Map<String,Object> fMeasureCheckDeleteJudge() throws Exception{
-		Subject subject = SecurityUtils.getSubject();
-		ActiveUser activeUser = (ActiveUser) subject.getPrincipal();
-		Map<String,Object> map = new HashMap<String,Object>();
-		if(!activeUser.getUserStatus().equals("1")){
-			map.put("msg", "您的账户已被锁定，请切换账户登录！");
-		}else if(!activeUser.getRoleStatus().equals("1")){
-			map.put("msg", "当前角色已被锁定，请切换账户登录！");
-		}else{
-			if(!subject.isPermitted("fMeasureCheck:delete")){
-				map.put("msg", "您没有权限，请切换用户登录！");
-			}
-		}
-		return map;
-	}
-	
-	//搜索
-	@RequestMapping("/search_fMeasureCheck_by_fMeasureCheckId")
-	@ResponseBody
-	public EUDataGridResult searchFMeasureCheckByFMeasureCheckId(Integer page, Integer rows, String searchValue)
-			throws Exception{
-		EUDataGridResult result = measureService.searchFMeasureCheckByFMeasureCheckId(page, rows, searchValue);
-		return result;
-	}
-	
-	//搜索
-	@RequestMapping("/search_fMeasureCheck_by_orderId")
-	@ResponseBody
-	public EUDataGridResult searchFMeasureCheckByOrderId(Integer page, Integer rows, String searchValue) 
-			throws Exception{
-		EUDataGridResult result = measureService.searchFMeasureCheckByOrderId(page, rows, searchValue);
-		return result;
-	}
-	
+
 	@RequestMapping("/list")
 	@ResponseBody
 	public EUDataGridResult getList(Integer page, Integer rows, FinalMeasuretCheck finalMeasuretCheck) 
 			throws Exception{
-		
 		EUDataGridResult result = measureService.getList(page, rows, finalMeasuretCheck);
 		return result;
 	}
-	/*
-	 *此处的method可以取两个值，
-	 *一个是RequestMethod.GET，一个是RequestMethod.POST，
-	 *就是请求该方法使用的模式，是get还是post，即参数提交的方法
-	 *ajax或者form表单提交数据有两种方法，即get和post。
-	 */
+
 	@RequestMapping(value="/insert", method=RequestMethod.POST)
 	@ResponseBody
 	private CustomResult insert(@Valid FinalMeasuretCheck finalMeasuretCheck, BindingResult bindingResult) 
@@ -196,8 +111,25 @@ public class FMeasurementController {
 	@RequestMapping(value="/delete_batch")
 	@ResponseBody
 	private CustomResult deleteBatch(String[] ids) throws Exception {
-		System.out.println(ids);
 		CustomResult result = measureService.deleteBatch(ids);
+		return result;
+	}
+
+	//根据成品计量质检id查找
+	@RequestMapping("/search_fMeasureCheck_by_fMeasureCheckId")
+	@ResponseBody
+	public EUDataGridResult searchFMeasureCheckByFMeasureCheckId(Integer page, Integer rows, String searchValue)
+			throws Exception{
+		EUDataGridResult result = measureService.searchFMeasureCheckByFMeasureCheckId(page, rows, searchValue);
+		return result;
+	}
+
+	//根据订单id查找
+	@RequestMapping("/search_fMeasureCheck_by_orderId")
+	@ResponseBody
+	public EUDataGridResult searchFMeasureCheckByOrderId(Integer page, Integer rows, String searchValue)
+			throws Exception{
+		EUDataGridResult result = measureService.searchFMeasureCheckByOrderId(page, rows, searchValue);
 		return result;
 	}
 }

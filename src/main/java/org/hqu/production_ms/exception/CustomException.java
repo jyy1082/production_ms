@@ -12,15 +12,11 @@ public class CustomException extends Exception {
 	
 	private static final long serialVersionUID = 1L;
 	
-	/**
-	 * 异常信息
-	 */
-	private String message;
+	private String message; //异常信息
 	
 	public CustomException(String message){
 		super(message);
 		this.message = message;
-		
 	}
 
 	public String getMessage() {
@@ -30,7 +26,4 @@ public class CustomException extends Exception {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
-	
-
 }

@@ -1,17 +1,12 @@
 package org.hqu.production_ms.controller;
 
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
-import org.hqu.production_ms.domain.COrder;
+import org.hqu.production_ms.domain.vo.COrderVO;
 import org.hqu.production_ms.domain.ProcessCountCheck;
-import org.hqu.production_ms.domain.custom.ActiveUser;
-import org.hqu.production_ms.domain.custom.CustomResult;
-import org.hqu.production_ms.domain.custom.EUDataGridResult;
+import org.hqu.production_ms.domain.customize.CustomResult;
+import org.hqu.production_ms.domain.customize.EUDataGridResult;
 import org.hqu.production_ms.service.PCountCheckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/p_count_check")
 public class PCountCheckController {
-	
+
 	@Autowired
 	private PCountCheckService pCountCheckService;
 	
@@ -47,7 +42,7 @@ public class PCountCheckController {
 	 */
 	@RequestMapping("/get/{orderId}")
 	@ResponseBody
-	public COrder getItemById(@PathVariable String orderId) throws Exception{
+	public COrderVO getItemById(@PathVariable String orderId) throws Exception{
 		return null;
 	}
 	
@@ -60,76 +55,10 @@ public class PCountCheckController {
 	public String add() throws Exception{
 		return "p_count_check_add";
 	}
-	
-	//搜索
-	@RequestMapping("/search_pCountCheck_by_pCountCheckId")
-	@ResponseBody
-	public EUDataGridResult searchpCountCheckBypCountCheckId(Integer page, Integer rows, String searchValue)
-			throws Exception{
-		EUDataGridResult result = pCountCheckService.searchPCountCheckByPCountCheckId(page, rows, searchValue);
-		return result;
-	}
-	
-	@RequestMapping("/add_judge")
-	@ResponseBody
-	public Map<String,Object> pCountCheckAddJudge() 
-			throws Exception{
-		//从shiro的session中取activeUser
-		Subject subject = SecurityUtils.getSubject();
-		//取身份信息
-		ActiveUser activeUser = (ActiveUser) subject.getPrincipal();
-		Map<String,Object> map = new HashMap<String,Object>(); 
-		if(!activeUser.getUserStatus().equals("1")){
-			map.put("msg", "您的账户已被锁定，请切换账户登录！");
-		}else if(!activeUser.getRoleStatus().equals("1")){
-			map.put("msg", "当前角色已被锁定，请切换账户登录！");
-		}else{
-			if(!subject.isPermitted("pCountCheck:add")){
-				map.put("msg", "您没有权限，请切换用户登录！");
-			}
-		}
-		return map;
-	}
-	
+
 	@RequestMapping("/edit")
 	public String edit() throws Exception{
 		return "p_count_check_edit";
-	}
-	
-	@RequestMapping("/edit_judge")
-	@ResponseBody
-	public Map<String,Object> pCountCheckEditJudge() throws Exception{
-		Subject subject = SecurityUtils.getSubject();
-		ActiveUser activeUser = (ActiveUser) subject.getPrincipal();
-		Map<String,Object> map = new HashMap<String,Object>();
-		if(!activeUser.getUserStatus().equals("1")){
-			map.put("msg", "您的账户已被锁定，请切换账户登录！");
-		}else if(!activeUser.getRoleStatus().equals("1")){
-			map.put("msg", "当前角色已被锁定，请切换账户登录！");
-		}else{
-			if(!subject.isPermitted("pCountCheck:edit")){
-				map.put("msg", "您没有权限，请切换用户登录！");
-			}
-		}
-		return map;
-	}
-	
-	@RequestMapping("/delete_judge")
-	@ResponseBody
-	public Map<String,Object> pCountCheckDeleteJudge() throws Exception{
-		Subject subject = SecurityUtils.getSubject();
-		ActiveUser activeUser = (ActiveUser) subject.getPrincipal();
-		Map<String,Object> map = new HashMap<String,Object>();
-		if(!activeUser.getUserStatus().equals("1")){
-			map.put("msg", "您的账户已被锁定，请切换账户登录！");
-		}else if(!activeUser.getRoleStatus().equals("1")){
-			map.put("msg", "当前角色已被锁定，请切换账户登录！");
-		}else{
-			if(!subject.isPermitted("pCountCheck:delete")){
-				map.put("msg", "您没有权限，请切换用户登录！");
-			}
-		}
-		return map;
 	}
 	
 	@RequestMapping("/list")
@@ -201,5 +130,14 @@ public class PCountCheckController {
 	@ResponseBody
 	public CustomResult changeStatus(String[] ids) throws Exception{
 		return null;
+	}
+
+	//根据工序计数质检id查找
+	@RequestMapping("/search_pCountCheck_by_pCountCheckId")
+	@ResponseBody
+	public EUDataGridResult searchpCountCheckBypCountCheckId(Integer page, Integer rows, String searchValue)
+			throws Exception{
+		EUDataGridResult result = pCountCheckService.searchPCountCheckByPCountCheckId(page, rows, searchValue);
+		return result;
 	}
 }

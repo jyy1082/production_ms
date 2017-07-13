@@ -32,16 +32,7 @@ public class FileController {
 
 	@Autowired
 	private FileService fileService;
-	/*
-	@RequestMapping("/file/upload")
-	@ResponseBody
-	public String pictureUpload(MultipartFile uploadFile) {
-		@SuppressWarnings("unchecked")
-		Map<String,Object> result = FileService.uploadFile(uploadFile);
-		//为了保证功能的兼容性，需要把Result转换成json格式的字符串。
-		String json = JsonUtils.objectToJson(result);
-		return json;
-	}*/
+
 	@RequestMapping(value="/file/upload", method=RequestMethod.POST)
 	@ResponseBody
 	public String handleFileUpload(MultipartHttpServletRequest request) throws Exception{
@@ -67,15 +58,10 @@ public class FileController {
 	}
 	
 	@RequestMapping(value="/file/download")
-	public void handleFileDownload(@RequestParam String fileName, HttpServletResponse response) 
-			throws Exception{
-		
+	public void handleFileDownload(@RequestParam String fileName, HttpServletResponse response) throws Exception{
 		fileName = fileName.substring(fileName.lastIndexOf("/")+1);
-		
 		String filePath = "D:\\upload\\temp\\file\\"+fileName;
-		
 		DownloadUtil du = new DownloadUtil();
-		
 		du.download(filePath, fileName, response, false);
 	}
 }

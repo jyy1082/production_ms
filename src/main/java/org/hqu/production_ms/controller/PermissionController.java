@@ -3,8 +3,8 @@ package org.hqu.production_ms.controller;
 import java.util.List;
 
 import org.hqu.production_ms.domain.authority.SysRolePermission;
-import org.hqu.production_ms.domain.custom.CustomResult;
-import org.hqu.production_ms.domain.custom.EUDataGridResult;
+import org.hqu.production_ms.domain.customize.CustomResult;
+import org.hqu.production_ms.domain.customize.EUDataGridResult;
 import org.hqu.production_ms.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/permission")
 public class PermissionController {
-	
+
 	@Autowired
 	private PermissionService permissionService;
 	
@@ -56,7 +56,7 @@ public class PermissionController {
 	
 	@RequestMapping("/list")
 	@ResponseBody
-	public EUDataGridResult getItemList(Integer page, Integer rows, SysRolePermission sysRolePermission) 
+	public EUDataGridResult getItemList(Integer page, Integer rows, SysRolePermission sysRolePermission)
 			throws Exception{
 		EUDataGridResult result = permissionService.getList(page, rows, sysRolePermission);
 		return result;
@@ -96,4 +96,5 @@ public class PermissionController {
 		CustomResult result = permissionService.delete(id);
 		return result;
 	}
+
 }

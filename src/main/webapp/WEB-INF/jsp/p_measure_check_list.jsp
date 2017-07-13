@@ -4,19 +4,36 @@
 <script type="text/javascript" charset="utf-8" src="js/kindeditor-4.1.10/kindeditor-all-min.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/kindeditor-4.1.10/lang/zh_CN.js"></script>
 
-<table  id="pMeasureCheckList" title="工序计量质检" class="easyui-datagrid"
-       data-options="singleSelect:false,collapsible:true,pagination:true,rownumbers:true,url:'p_measure_check/list',method:'get',pageSize:10,fitColumns:true,toolbar:toolbar_pMeasureCheck">
+<table  id="pMeasureCheckList" title="工序计量质检" class="easyui-datagrid" data-options="singleSelect:false,
+		collapsible:true,pagination:true,rownumbers:true,url:'p_measure_check/list',method:'get',pageSize:10,
+		fitColumns:true,toolbar:toolbar_pMeasureCheck">
     <thead>
         <tr>
         	<th data-options="field:'ck',checkbox:true"></th>
-        	<th data-options="field:'pMeasureCheckId',align:'center',width:100">工序计量质检编号</th>
-            <th data-options="field:'processId',align:'center',width:100,formatter:formatPMeasureCheckProcess">工序编号</th>
-            <th data-options="field:'checkItem',align:'center',width:100">检验项目</th>
-            <th data-options="field:'cdate',width:130,align:'center',formatter:TAOTAO.formatDateTime">检验时间</th>
-            <th data-options="field:'measureData',width:100,align:'center'">实际测量数据</th>
-            <th data-options="field:'empName',width:100,align:'center',formatter:formatEmp_pMeasure">检验人</th>
-            <th data-options="field:'result',width:130,align:'center'">检验结果</th>
-            <th data-options="field:'note',width:100,align:'center', formatter:formatPMeasureCheckNote">备注</th>
+        	<th data-options="field:'pMeasureCheckId',align:'center',width:100">
+				工序计量质检编号
+			</th>
+            <th data-options="field:'processId',align:'center',width:100,formatter:formatPMeasureCheckProcess">
+				工序编号
+			</th>
+            <th data-options="field:'checkItem',align:'center',width:100">
+				检验项目
+			</th>
+            <th data-options="field:'cdate',width:130,align:'center',formatter:TAOTAO.formatDateTime">
+				检验时间
+			</th>
+            <th data-options="field:'measureData',width:100,align:'center'">
+				实际测量数据
+			</th>
+            <th data-options="field:'empName',width:100,align:'center',formatter:formatEmp_pMeasure">
+				检验人
+			</th>
+            <th data-options="field:'result',width:130,align:'center'">
+				检验结果
+			</th>
+            <th data-options="field:'note',width:100,align:'center', formatter:formatPMeasureCheckNote">
+				备注
+			</th>
             
         </tr>
     </thead>
@@ -28,17 +45,23 @@
 	<c:forEach items="${sessionScope.sysPermissionList}" var="per" >
 		<c:if test="${per=='pMeasureCheck:add' }" >
 		    <div style="float: left;">  
-		        <a href="#" class="easyui-linkbutton" plain="true" icon="icon-add" onclick="pMeasureCheck_add()">新增</a>  
+		        <a href="#" class="easyui-linkbutton" plain="true" icon="icon-add" onclick="pMeasureCheck_add()">
+					新增
+				</a>
 		    </div>  
 		</c:if>
 		<c:if test="${per=='pMeasureCheck:edit' }" >
 		    <div style="float: left;">  
-		        <a href="#" class="easyui-linkbutton" plain="true" icon="icon-edit" onclick="pMeasureCheck_edit()">编辑</a>  
+		        <a href="#" class="easyui-linkbutton" plain="true" icon="icon-edit" onclick="pMeasureCheck_edit()">
+					编辑
+				</a>
 		    </div>  
 		</c:if>
 		<c:if test="${per=='pMeasureCheck:delete' }" >
 		    <div style="float: left;">  
-		        <a href="#" class="easyui-linkbutton" plain="true" icon="icon-cancel" onclick="pMeasureCheck_delete()">删除</a>  
+		        <a href="#" class="easyui-linkbutton" plain="true" icon="icon-cancel" onclick="pMeasureCheck_delete()">
+					删除
+				</a>
 		    </div>  
 		</c:if>
 	</c:forEach>
@@ -46,7 +69,9 @@
 	<div class="datagrid-btn-separator"></div>  
 	
 	<div style="float: left;">  
-		<a href="#" class="easyui-linkbutton" plain="true" icon="icon-reload" onclick="pMeasureCheck_reload()">刷新</a>  
+		<a href="#" class="easyui-linkbutton" plain="true" icon="icon-reload" onclick="pMeasureCheck_reload()">
+			刷新
+		</a>
 	</div>  
 	
     <div id="search_pMeasureCheck" style="float: right;">
@@ -62,35 +87,39 @@
 </div>  
 <!-- 111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 -->
 
-<div id="pMeasureCheckEditWindow" class="easyui-window" title="编辑工序计量质检" data-options="modal:true,closed:true,resizable:true,iconCls:'icon-save',href:'p_measure_check/edit'" style="width:65%;height:75%;padding:10px;">
+<div id="pMeasureCheckEditWindow" class="easyui-window" title="编辑工序计量质检" data-options="modal:true,closed:true,
+	resizable:true,iconCls:'icon-save',href:'p_measure_check/edit'" style="width:65%;height:75%;padding:10px;">
 </div>
-<div id="pMeasureCheckAddWindow" class="easyui-window" title="添加工序计量质检" data-options="modal:true,closed:true,resizable:true,iconCls:'icon-save',href:'p_measure_check/add'" style="width:65%;height:75%;padding:10px;">
+<div id="pMeasureCheckAddWindow" class="easyui-window" title="添加工序计量质检" data-options="modal:true,closed:true,
+	resizable:true,iconCls:'icon-save',href:'p_measure_check/add'" style="width:65%;height:75%;padding:10px;">
 </div>
 
 <!-- ********************************************************************************** -->
 
 
-<div id="p2pMeasureInfo" class="easyui-dialog" title="工序信息" data-options="modal:true,closed:true,resizable:true,iconCls:'icon-save'" style="width:35%;height:40%;padding:10px;">
+<div id="p2pMeasureInfo" class="easyui-dialog" title="工序信息" data-options="modal:true,closed:true,resizable:true,
+	iconCls:'icon-save'" style="width:35%;height:40%;padding:10px;">
 	<form id="p2pEditForm" method="post">
 		<input type="hidden" name="processId"/>
 	    <table cellpadding="5">
 	        <tr>
 	            <td>工艺计划编号:</td>
 	            <td>
-	            	<input class="easyui-combobox" name="technologyPlanId" panelHeight="auto"  
-    					data-options="required:true,valueField:'technologyPlanId',textField:'technologyPlanId',url:'technologyPlan/get_data',editable:false" /> 
+	            	<input class="easyui-combobox" name="technologyPlanId" panelHeight="auto"
+						   data-options="required:true,valueField:'technologyPlanId',textField:'technologyPlanId',
+						   url:'technologyPlan/get_data',editable:false" />
 	            </td>
 	        </tr>
 	        <tr>
 	            <td>工序顺序:</td>
 	            <td>
-	            	<input class="easyui-numberbox" type="text" name="sequence" ></input>
+	            	<input class="easyui-numberbox" type="text" name="sequence"/>
     			</td>  
 	        </tr>
 	         <tr>
 	            <td>单件定额工时:</td>
 	            <td>
-	            	<input class="easyui-numberbox" type="text" name="quota" ></input>
+	            	<input class="easyui-numberbox" type="text" name="quota"/>
     			</td>  
 	        </tr>
 	       
@@ -102,18 +131,20 @@
 </div>
 
 <!-- 检验人信息 -->
-<div id="empInfo_pMeasure" class="easyui-dialog" title="检验人信息" data-options="modal:true,closed:true,resizable:true,iconCls:'icon-save'" style="width:33%;height:65%;padding:10px;">
+<div id="empInfo_pMeasure" class="easyui-dialog" title="检验人信息" data-options="modal:true,closed:true,resizable:true,
+		iconCls:'icon-save'" style="width:33%;height:65%;padding:10px;">
 	<form id="empEditForm_pMeasure" method="post">
 		<input type="hidden" name="empId"/>
 	    <table cellpadding="5">
 	        <tr>
 	           	<td>姓名:</td>
-	           	<td><input class="easyui-textbox" name="empName" data-options="editable:false"></input></td>
+	           	<td><input class="easyui-textbox" name="empName" data-options="editable:false"/></td>
 	        </tr>
 	        <tr>
 	            <td>性别:</td>
 	            <td>
-	            	<select id="sexCombobox" class="easyui-combobox" name="sex" panelHeight="auto" data-options="editable:false" style="width:173px">
+	            	<select id="sexCombobox" class="easyui-combobox" name="sex" panelHeight="auto"
+							data-options="editable:false" style="width:173px">
 						<option value="1">男</option>
 						<option value="2">女</option>
 					</select>
@@ -121,43 +152,42 @@
 	        </tr>
 	        <tr>
 	            <td>所属部门:</td>
-	            <!-- <td><input class="easyui-textbox" name="department" data-options="formatter:formatDepartment_test"></input></td> -->
 	            <td>
 	            	<input class="easyui-combobox" name="departmentId" panelHeight="auto"
-    					data-options="valueField:'departmentId',textField:'departmentName',url:'department/get_data'" />
+    					data-options="valueField:'departmentId',textField:'departmentName',url:'department/get_data'"/>
     			</td> 
 	        </tr>
 	        <tr>
 	            <td>身份证号:</td>
-	            <td><input class="easyui-textbox" name="idCode"></input></td>
+	            <td><input class="easyui-textbox" name="idCode"/></td>
 	        </tr>
 	        <tr>
 	            <td>学历:</td>
-	            <td><input class="easyui-textbox" name="education"></input></td>
+	            <td><input class="easyui-textbox" name="education"/></td>
 	        </tr>
 	        <tr>
 	            <td>学位:</td>
-	            <td><input class="easyui-textbox" name="degree"></input></td>
+	            <td><input class="easyui-textbox" name="degree"/></td>
 	        </tr>
 	        <tr>
 	            <td>专业:</td>
-	            <td><input class="easyui-textbox" name="major" ></input></td>
+	            <td><input class="easyui-textbox" name="major"/></td>
 	        </tr>
 	        <tr>
 	            <td>受教育形式:</td>
-	            <td><input class="easyui-textbox" name="educationForm" ></input></td>
+	            <td><input class="easyui-textbox" name="educationForm"/></td>
 	        </tr>
 	        <tr>
 	            <td>生日:</td>
-	            <td><input class="easyui-datetimebox" name="birthday" ></input></td>
+	            <td><input class="easyui-datetimebox" name="birthday"/></td>
 	        </tr>
 	        <tr>
 	            <td>入职日期:</td>
-	            <td><input class="easyui-datetimebox" name="joinDate" ></input></td>
+	            <td><input class="easyui-datetimebox" name="joinDate"/></td>
 	        </tr>
 	        <tr>
 	            <td>员工状态:</td>
-	            <td><input class="easyui-textbox" name="status" ></input></td>
+	            <td><input class="easyui-textbox" name="status"/></td>
 	        </tr>
 	    </table>
 	</form>
@@ -168,7 +198,8 @@
 
 <!-- ********************************************************************************** -->
 
-<div id="pMeasureCheckNoteDialog" class="easyui-dialog" title="工序计量质检备注" data-options="modal:true,closed:true,resizable:true,iconCls:'icon-save'" style="width:55%;height:65%;padding:10px">
+<div id="pMeasureCheckNoteDialog" class="easyui-dialog" title="工序计量质检备注" data-options="modal:true,closed:true,
+		resizable:true,iconCls:'icon-save'" style="width:55%;height:65%;padding:10px">
 	<form id="pMeasureCheckNoteForm" class="itemForm" method="post">
 		<input type="hidden" name="pMeasureCheckId"/>
 	    <table cellpadding="5" >
@@ -188,43 +219,43 @@
 function doSearch_pMeasureCheck(value,name){ //用户输入用户名,点击搜素,触发此函数  
 	if(value == null || value == ''){
 		$("#pMeasureCheckList").datagrid({
-	        title:'工序计量质检', singleSelect:false, collapsible:true, pagination:true, rownumbers:true, method:'get', nowrap:true,  
-	        toolbar:"toolbar_pMeasureCheck", url:'p_measure_check/list', method:'get', loadMsg:'数据加载中......',  fitColumns:true,//允许表格自动缩放,以适应父容器  
+	        title:'工序计量质检', singleSelect:false, collapsible:true, pagination:true, rownumbers:true, method:'get',
+			nowrap:true, toolbar:"toolbar_pMeasureCheck", url:'p_measure_check/list', method:'get',
+			loadMsg:'数据加载中......',  fitColumns:true,//允许表格自动缩放,以适应父容器
 	        columns : [ [ 
-	             	{field : 'ck', checkbox:true }, 
-	             	{field : 'pMeasureCheckId', width : 100, title : '工序计量质检编号', align:'center'},
-	             	{field : 'processId', width : 100, align : 'center', title : '工序编号'},
-	             	{field : 'checkItem', width : 100, align : 'center', title : '检验项目'}, 
-	             	{field : 'cdate', width : 130, title : '检验时间', align:'center',formatter:TAOTAO.formatDateTime}, 
-	             	{field : 'measureData', width : 100, title : '实际测量数据', align:'center'}, 
-	            	{field : 'empName', width : 100, title : '检验人', align:'center',formatter:formatEmp_pMeasure}, 
-	             	{field : 'result', width : 100, title : '检验结果', align:'center'}, 
-	             	{field : 'note', width : 130, title : '备注', align:'center', formatter:formatPMeasureCheckNote} 
+				{field : 'ck', checkbox:true },
+				{field : 'pMeasureCheckId', width : 100, title : '工序计量质检编号', align:'center'},
+				{field : 'processId', width : 100, align : 'center', title : '工序编号'},
+				{field : 'checkItem', width : 100, align : 'center', title : '检验项目'},
+				{field : 'cdate', width : 130, title : '检验时间', align:'center',formatter:TAOTAO.formatDateTime},
+				{field : 'measureData', width : 100, title : '实际测量数据', align:'center'},
+				{field : 'empName', width : 100, title : '检验人', align:'center',formatter:formatEmp_pMeasure},
+				{field : 'result', width : 100, title : '检验结果', align:'center'},
+				{field : 'note', width : 130, title : '备注', align:'center', formatter:formatPMeasureCheckNote}
 	        ] ],  
 	    });
 	}else{
 		$("#pMeasureCheckList").datagrid({  
-	        title:'工序计量质检', singleSelect:false, collapsible:true, pagination:true, rownumbers:true, method:'get', nowrap:true,  
-	        toolbar:"toolbar_pMeasureCheck", url:'p_measure_check/search_pMeasureCheck_by_'+name+'?searchValue='+value, loadMsg:'数据加载中......',  fitColumns:true,//允许表格自动缩放,以适应父容器  
+	        title:'工序计量质检', singleSelect:false, collapsible:true, pagination:true, rownumbers:true, method:'get',
+			nowrap:true, toolbar:"toolbar_pMeasureCheck", url:'p_measure_check/search_pMeasureCheck_by_'+name
+				+'?searchValue='+value, loadMsg:'数据加载中......',  fitColumns:true,//允许表格自动缩放,以适应父容器
 	        columns : [ [ 
-					{field : 'ck', checkbox:true }, 
-					{field : 'pMeasureCheckId', width : 100, title : '工序计量质检编号', align:'center'},
-					{field : 'processId', width : 100, align : 'center', title : '工序编号'},
-					{field : 'checkItem', width : 100, align : 'center', title : '检验项目'}, 
-					{field : 'cdate', width : 130, title : '检验时间', align:'center',formatter:TAOTAO.formatDateTime}, 
-					{field : 'measureData', width : 100, title : '实际测量数据', align:'center'}, 
-					{field : 'empName', width : 100, title : '检验人', align:'center',formatter:formatEmp_pMeasure}, 
-					{field : 'result', width : 100, title : '检验结果', align:'center'}, 
-					{field : 'note', width : 130, title : '备注', align:'center', formatter:formatPMeasureCheckNote} 
+				{field : 'ck', checkbox:true },
+				{field : 'pMeasureCheckId', width : 100, title : '工序计量质检编号', align:'center'},
+				{field : 'processId', width : 100, align : 'center', title : '工序编号'},
+				{field : 'checkItem', width : 100, align : 'center', title : '检验项目'},
+				{field : 'cdate', width : 130, title : '检验时间', align:'center',formatter:TAOTAO.formatDateTime},
+				{field : 'measureData', width : 100, title : '实际测量数据', align:'center'},
+				{field : 'empName', width : 100, title : '检验人', align:'center',formatter:formatEmp_pMeasure},
+				{field : 'result', width : 100, title : '检验结果', align:'center'},
+				{field : 'note', width : 130, title : '备注', align:'center', formatter:formatPMeasureCheckNote}
 	        ] ],  
 	    });
 	}
 }
 
-	var pMeasureCheckNoteEditor ;
-	
-	//////////////////////////////////////////////////////////////////////////
-	
+	var pMeasureCheckNoteEditor;
+
 	//格式化工序信息
 	function  formatPMeasureCheckProcess(value, row, index){ 
 		if(value == null){
@@ -368,7 +399,7 @@ function doSearch_pMeasureCheck(value,name){ //用户输入用户名,点击搜�
 	
 	//更新备注
 	function updatePMeasureCheckNote(){
-		$.get("p_measure_check/edit_judge",'',function(data){
+		$.get("pMeasureCheck/edit_judge",'',function(data){
     		if(data.msg != null){
     			$.messager.alert('提示', data.msg);
     		}else{
@@ -400,7 +431,7 @@ function doSearch_pMeasureCheck(value,name){ //用户输入用户名,点击搜�
     //////////////////////////////////////////////////////////////////////////
     
     function pMeasureCheck_add(){
-    	$.get("p_measure_check/add_judge",'',function(data){
+    	$.get("pMeasureCheck/add_judge",'',function(data){
        		if(data.msg != null){
        			$.messager.alert('提示', data.msg);
        		}else{
@@ -410,7 +441,7 @@ function doSearch_pMeasureCheck(value,name){ //用户输入用户名,点击搜�
     }
     
     function pMeasureCheck_edit(){
-    	$.get("p_measure_check/edit_judge",'',function(data){
+    	$.get("pMeasureCheck/edit_judge",'',function(data){
        		if(data.msg != null){
        			$.messager.alert('提示', data.msg);
        		}else{
@@ -440,7 +471,7 @@ function doSearch_pMeasureCheck(value,name){ //用户输入用户名,点击搜�
     }
     
     function pMeasureCheck_delete(){
-    	$.get("p_measure_check/delete_judge",'',function(data){
+    	$.get("pMeasureCheck/delete_judge",'',function(data){
        		if(data.msg != null){
        			$.messager.alert('提示', data.msg);
        		}else{

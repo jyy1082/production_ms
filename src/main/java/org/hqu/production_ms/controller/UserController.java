@@ -1,16 +1,10 @@
 package org.hqu.production_ms.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.validation.Valid;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
+import org.hqu.production_ms.domain.customize.CustomResult;
+import org.hqu.production_ms.domain.customize.EUDataGridResult;
 import org.hqu.production_ms.domain.authority.SysUser;
-import org.hqu.production_ms.domain.custom.CustomResult;
-import org.hqu.production_ms.domain.custom.EUDataGridResult;
-import org.hqu.production_ms.domain.po.UserPO;
 import org.hqu.production_ms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-	
+
 	@Autowired
 	private UserService userService;
 	
@@ -45,31 +39,9 @@ public class UserController {
 		return "user_role_edit";
 	}
 	
-	@RequestMapping("/add_judge")
-	@ResponseBody
-	public Map<String,Object> userAddJudge() throws Exception{
-		Map<String,Object> map = new HashMap<String,Object>();  
-		Subject currentUser = SecurityUtils.getSubject();
-		if(!currentUser.isPermitted("user:add")){
-			map.put("msg", "您没有权限，请切换用户登录！");
-		}
-		return map;
-	}
-	
 	@RequestMapping("/add")
 	public String add() throws Exception{
 		return "user_add";
-	}
-	
-	@RequestMapping("/edit_judge")
-	@ResponseBody
-	public Map<String,Object> userEditJudge() throws Exception{
-		Map<String,Object> map = new HashMap<String,Object>();  
-		Subject currentUser = SecurityUtils.getSubject();
-		if(!currentUser.isPermitted("user:edit")){
-			map.put("msg", "您没有权限，请切换用户登录！");
-		}
-		return map;
 	}
 	
 	@RequestMapping("/edit")
@@ -86,7 +58,7 @@ public class UserController {
 	
 	@RequestMapping(value="/insert", method=RequestMethod.POST)
 	@ResponseBody
-	private CustomResult insert(@Valid UserPO user, BindingResult bindingResult) throws Exception {
+	private CustomResult insert(@Valid SysUser user, BindingResult bindingResult) throws Exception {
 		CustomResult result;
 		if(bindingResult.hasErrors()){
 			FieldError fieldError = bindingResult.getFieldError();
@@ -103,7 +75,7 @@ public class UserController {
 	
 	@RequestMapping(value="/update")
 	@ResponseBody
-	private CustomResult update(@Valid UserPO user, BindingResult bindingResult) throws Exception {
+	private CustomResult update(@Valid SysUser user, BindingResult bindingResult) throws Exception {
 		if(bindingResult.hasErrors()){
 			FieldError fieldError = bindingResult.getFieldError();
 			return CustomResult.build(100, fieldError.getDefaultMessage());
@@ -113,7 +85,7 @@ public class UserController {
 	
 	@RequestMapping(value="/update_all")
 	@ResponseBody
-	private CustomResult updateAll(@Valid UserPO user, BindingResult bindingResult) throws Exception {
+	private CustomResult updateAll(@Valid SysUser user, BindingResult bindingResult) throws Exception {
 		CustomResult result; 
 		if(bindingResult.hasErrors()){
 			FieldError fieldError = bindingResult.getFieldError();
@@ -125,17 +97,6 @@ public class UserController {
 		
 		result = userService.updateAll(user);
 		return result;
-	}
-	
-	@RequestMapping("/delete_judge")
-	@ResponseBody
-	public Map<String,Object> userDeleteJudge() throws Exception{
-		Map<String,Object> map = new HashMap<String,Object>();  
-		Subject currentUser = SecurityUtils.getSubject();
-		if(!currentUser.isPermitted("user:delete")){
-			map.put("msg", "您没有权限，请切换用户登录！");
-		}
-		return map;
 	}
 	
 	@RequestMapping(value="/delete")
@@ -159,7 +120,7 @@ public class UserController {
 		return result;
 	}
 	
-	//搜索
+	//根据用户id查找
 	@RequestMapping("/search_user_by_userId")
 	@ResponseBody
 	public EUDataGridResult searchUserByUserId(Integer page, Integer rows, String searchValue) 
@@ -168,7 +129,7 @@ public class UserController {
 		return result;
 	}
 	
-	//搜索
+	//根据用户名查找
 	@RequestMapping("/search_user_by_userName")
 	@ResponseBody
 	public EUDataGridResult searchUserByUserName(Integer page, Integer rows, String searchValue) 
@@ -177,7 +138,7 @@ public class UserController {
 		return result;
 	}
 	
-	//搜索
+	//搜根据角色名查找
 	@RequestMapping("/search_user_by_roleName")
 	@ResponseBody
 	public EUDataGridResult searchUserByRoleName(Integer page, Integer rows, String searchValue) 

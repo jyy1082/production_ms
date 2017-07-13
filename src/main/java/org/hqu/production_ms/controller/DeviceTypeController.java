@@ -1,22 +1,12 @@
 package org.hqu.production_ms.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-
-
-
-
 
 import javax.validation.Valid;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.hqu.production_ms.domain.DeviceType;
-import org.hqu.production_ms.domain.custom.ActiveUser;
-import org.hqu.production_ms.domain.custom.CustomResult;
-import org.hqu.production_ms.domain.custom.EUDataGridResult;
+import org.hqu.production_ms.domain.customize.CustomResult;
+import org.hqu.production_ms.domain.customize.EUDataGridResult;
 import org.hqu.production_ms.service.DeviceTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/deviceType")
 public class DeviceTypeController {
-	
+
 	@Autowired
 	private DeviceTypeService deviceTypeService;
 	
@@ -60,64 +50,9 @@ public class DeviceTypeController {
 		return "deviceType_add";
 	}
 	
-	@RequestMapping("/add_judge")
-	@ResponseBody
-	public Map<String,Object> deviceTypeAddJudge() throws Exception{
-		//从shiro的session中取activeUser
-		Subject subject = SecurityUtils.getSubject();
-		//取身份信息
-		ActiveUser activeUser = (ActiveUser) subject.getPrincipal();
-		Map<String,Object> map = new HashMap<String,Object>(); 
-		if(!activeUser.getUserStatus().equals("1")){
-			map.put("msg", "您的账户已被锁定，请切换账户登录！");
-		}else if(!activeUser.getRoleStatus().equals("1")){
-			map.put("msg", "当前角色已被锁定，请切换账户登录！");
-		}else{
-			if(!subject.isPermitted("deviceType:add")){
-				map.put("msg", "您没有权限，请切换用户登录！");
-			}
-		}
-		return map;
-	}
-	
 	@RequestMapping("/edit")
 	public String edit() throws Exception{
 		return "deviceType_edit";
-	}
-	
-	@RequestMapping("/edit_judge")
-	@ResponseBody
-	public Map<String,Object> deviceTypeEditJudge() throws Exception{
-		Subject subject = SecurityUtils.getSubject();
-		ActiveUser activeUser = (ActiveUser) subject.getPrincipal();
-		Map<String,Object> map = new HashMap<String,Object>();
-		if(!activeUser.getUserStatus().equals("1")){
-			map.put("msg", "您的账户已被锁定，请切换账户登录！");
-		}else if(!activeUser.getRoleStatus().equals("1")){
-			map.put("msg", "当前角色已被锁定，请切换账户登录！");
-		}else{
-			if(!subject.isPermitted("deviceType:edit")){
-				map.put("msg", "您没有权限，请切换用户登录！");
-			}
-		}
-		return map;
-	}
-	
-	@RequestMapping("/delete_judge")
-	@ResponseBody
-	public Map<String,Object> deviceTypeDeleteJudge() throws Exception{
-		Subject subject = SecurityUtils.getSubject();
-		ActiveUser activeUser = (ActiveUser) subject.getPrincipal();
-		Map<String,Object> map = new HashMap<String,Object>();
-		if(!activeUser.getUserStatus().equals("1")){
-			map.put("msg", "您的账户已被锁定，请切换账户登录！");
-		}else if(!activeUser.getRoleStatus().equals("1")){
-			map.put("msg", "当前角色已被锁定，请切换账户登录！");
-			if(!subject.isPermitted("deviceType:delete")){
-				map.put("msg", "您没有权限，请切换用户登录！");
-			}
-		}
-		return map;
 	}
 	
 	/*
@@ -169,7 +104,7 @@ public class DeviceTypeController {
 		return deviceTypeService.updateAll(deviceType);
 	}
 	
-	//根据设备种类编号查找设备种类信息
+	//根据设备种类编号查找
 	@RequestMapping("/search_deviceType_by_deviceTypeId")
 	@ResponseBody
 	public EUDataGridResult searchDeviceTypeByDeviceTypeId(Integer page, Integer rows, String searchValue) 
@@ -178,7 +113,7 @@ public class DeviceTypeController {
 		return result;
 	}
 	
-	//根据设备种类名称查找设备种类信息
+	//根据设备种类名称查找
 	@RequestMapping("/search_deviceType_by_deviceTypeName")
 	@ResponseBody
 	public EUDataGridResult searchDeviceTypeByDeviceTypeName(Integer page, Integer rows, String searchValue) 

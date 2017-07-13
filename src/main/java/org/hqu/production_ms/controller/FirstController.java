@@ -8,7 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.hqu.production_ms.domain.authority.SysPermission;
-import org.hqu.production_ms.domain.custom.ActiveUser;
+import org.hqu.production_ms.domain.customize.ActiveUser;
 import org.hqu.production_ms.service.SysService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,21 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class FirstController {
-	
+
 	@Autowired
 	private SysService sysService;
 	
 	//跳转登录
-	@RequestMapping("/first")
+	@RequestMapping(value={"/","/first","/login"})
 	public String first(Model model)throws Exception{
-		
-		return "login";
-	}
-	
-	//跳转登录
-	@RequestMapping("/")
-	public String welcome(Model model, HttpSession session)throws Exception{
-
 		return "login";
 	}
 	
@@ -60,8 +52,6 @@ public class FirstController {
 				sysPermissionList.add(permissionList.get(i).getPercode());
 			}
 		}
-
-		/*String sysPermissionsList = JsonUtils.objectToJson(sysPermissionList);*/
 
 		//通过model传到页面
 		model.addAttribute("activeUser", activeUser);

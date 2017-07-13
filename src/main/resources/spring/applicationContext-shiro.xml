@@ -86,15 +86,22 @@
 
 	<!-- 会话管理器 -->
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
-        <!-- session的失效时长，单位毫秒 -->
+        <!-- session的失效时长，单位毫秒 ，这里设置为10分钟-->
         <property name="globalSessionTimeout" value="600000"/>
         <!-- 删除失效的session -->
         <property name="deleteInvalidSessions" value="true"/>
+        <!-- 指定本系统sessionId, 默认为: JSESSIONID 问题: 与Servlet容器名冲突, 如Jetty, Tomcat等默认JSESSIONID,
+        	当跳出shiro Servlet时如Error-page容器会为JSESSIONID重新分配值导致登录会话丢失! -->
+        <property name="sessionIdCookie" ref="sessionIdCookie"/>
+    </bean>
+
+    <bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <constructor-arg name="name" value="ycyintang.session.id"/>
     </bean>
 
 	<!-- 自定义form认证过虑器 -->
 	<!-- 基于Form表单的身份验证过滤器，不配置将也会注册此过虑器，表单中的用户账号、密码及loginurl将采用默认值，建议配置 -->
-<!-- 	<bean id="formAuthenticationFilter" class="org.hqu.production_ms.shiro.CustomFormAuthenticationFilter">
+	<!--<bean id="formAuthenticationFilter" class="org.hqu.production_ms.shiro.CustomFormAuthenticationFilter">
 		表单中账号的input名称
 		<property name="usernameParam" value="username" />
 		表单中密码的input名称
@@ -114,6 +121,5 @@
 		<!-- 记住我cookie生效时间30天 -->
 		<property name="maxAge" value="2592000" />
 	</bean>
-
 
 </beans>

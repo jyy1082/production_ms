@@ -1,4 +1,4 @@
-package org.hqu.production_ms.domain.custom;
+package org.hqu.production_ms.domain.customize;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package org.hqu.production_ms.domain.custom;
+package org.hqu.production_ms.domain.customize;
 
 import java.util.List;
 
@@ -6,15 +6,14 @@ import org.hqu.production_ms.domain.authority.SysPermission;
 
 
 /**
+ * created on 2016年9月8日 
+ *
  * 用户身份信息，存入session 由于tomcat将session会序列化在本地硬盘上，所以使用Serializable接口
- * 
- * @author Thinkpad
- * 
+ *
+ * @author  megagao
+ * @version  0.0.1
  */
 public class ActiveUser implements java.io.Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private String userid;//用户id（主键）
 	private String username;// 用户名称

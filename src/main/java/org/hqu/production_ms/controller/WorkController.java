@@ -1,18 +1,13 @@
 package org.hqu.production_ms.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
+import org.hqu.production_ms.domain.vo.WorkVO;
+import org.hqu.production_ms.domain.customize.CustomResult;
+import org.hqu.production_ms.domain.customize.EUDataGridResult;
 import org.hqu.production_ms.domain.Work;
-import org.hqu.production_ms.domain.custom.ActiveUser;
-import org.hqu.production_ms.domain.custom.CustomResult;
-import org.hqu.production_ms.domain.custom.EUDataGridResult;
-import org.hqu.production_ms.domain.po.WorkPO;
 import org.hqu.production_ms.service.WorkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,47 +43,9 @@ public class WorkController {
 		return workService.find();
 	}
 	
-	@RequestMapping("/add_judge")
-	@ResponseBody
-	public Map<String,Object> workAddJudge() throws Exception{
-		//从shiro的session中取activeUser
-		Subject subject = SecurityUtils.getSubject();
-		//取身份信息
-		ActiveUser activeUser = (ActiveUser) subject.getPrincipal();
-		Map<String,Object> map = new HashMap<String,Object>(); 
-		if(!activeUser.getUserStatus().equals("1")){
-			map.put("msg", "您的账户已被锁定，请切换账户登录！");
-		}else if(!activeUser.getRoleStatus().equals("1")){
-			map.put("msg", "当前角色已被锁定，请切换账户登录！");
-		}else{
-			if(!subject.isPermitted("work:add")){
-				map.put("msg", "您没有权限，请切换用户登录！");
-			}
-		}
-		return map;
-	}
-	
 	@RequestMapping("/add")
 	public String add() throws Exception{
 		return "work_add";
-	}
-	
-	@RequestMapping("/edit_judge")
-	@ResponseBody
-	public Map<String,Object> workEditJudge() throws Exception{
-		Subject subject = SecurityUtils.getSubject();
-		ActiveUser activeUser = (ActiveUser) subject.getPrincipal();
-		Map<String,Object> map = new HashMap<String,Object>();
-		if(!activeUser.getUserStatus().equals("1")){
-			map.put("msg", "您的账户已被锁定，请切换账户登录！");
-		}else if(!activeUser.getRoleStatus().equals("1")){
-			map.put("msg", "当前角色已被锁定，请切换账户登录！");
-		}else{
-			if(!subject.isPermitted("work:edit")){
-				map.put("msg", "您没有权限，请切换用户登录！");
-			}
-		}
-		return map;
 	}
 	
 	@RequestMapping("/edit")
@@ -98,14 +55,14 @@ public class WorkController {
 	
 	@RequestMapping("/list")
 	@ResponseBody
-	public EUDataGridResult getItemList(Integer page, Integer rows, Work work) throws Exception{
+	public EUDataGridResult getItemList(Integer page, Integer rows, WorkVO work) throws Exception{
 		EUDataGridResult result = workService.getList(page, rows, work);
 		return result;
 	}
 	
 	@RequestMapping(value="/insert", method=RequestMethod.POST)
 	@ResponseBody
-	private CustomResult insert(@Valid WorkPO work, BindingResult bindingResult) throws Exception {
+	private CustomResult insert(@Valid Work work, BindingResult bindingResult) throws Exception {
 		CustomResult result;
 		if(bindingResult.hasErrors()){
 			FieldError fieldError = bindingResult.getFieldError();
@@ -121,7 +78,7 @@ public class WorkController {
 	
 	@RequestMapping(value="/update")
 	@ResponseBody
-	private CustomResult update(@Valid WorkPO work, BindingResult bindingResult) throws Exception {
+	private CustomResult update(@Valid Work work, BindingResult bindingResult) throws Exception {
 		if(bindingResult.hasErrors()){
 			FieldError fieldError = bindingResult.getFieldError();
 			return CustomResult.build(100, fieldError.getDefaultMessage());
@@ -131,30 +88,12 @@ public class WorkController {
 	
 	@RequestMapping(value="/update_all")
 	@ResponseBody
-	private CustomResult updateAll(@Valid WorkPO work, BindingResult bindingResult) throws Exception {
+	private CustomResult updateAll(@Valid Work work, BindingResult bindingResult) throws Exception {
 		if(bindingResult.hasErrors()){
 			FieldError fieldError = bindingResult.getFieldError();
 			return CustomResult.build(100, fieldError.getDefaultMessage());
 		}
 		return workService.updateAll(work);
-	}
-	
-	@RequestMapping("/delete_judge")
-	@ResponseBody
-	public Map<String,Object> workDeleteJudge() throws Exception{
-		Subject subject = SecurityUtils.getSubject();
-		ActiveUser activeUser = (ActiveUser) subject.getPrincipal();
-		Map<String,Object> map = new HashMap<String,Object>();
-		if(!activeUser.getUserStatus().equals("1")){
-			map.put("msg", "您的账户已被锁定，请切换账户登录！");
-		}else if(!activeUser.getRoleStatus().equals("1")){
-			map.put("msg", "当前角色已被锁定，请切换账户登录！");
-		}else{
-			if(!subject.isPermitted("work:delete")){
-				map.put("msg", "您没有权限，请切换用户登录！");
-			}
-		}
-		return map;
 	}
 	
 	@RequestMapping(value="/delete")
@@ -171,38 +110,34 @@ public class WorkController {
 		return result;
 	}
 	
-	//搜索
+	//根据作业id查找
 	@RequestMapping("/search_work_by_workId")
 	@ResponseBody
-	public EUDataGridResult searchWorkByWorkId(Integer page, Integer rows, String searchValue) 
-			throws Exception{
+	public EUDataGridResult searchWorkByWorkId(Integer page, Integer rows, String searchValue) throws Exception{
 		EUDataGridResult result = workService.searchWorkByWorkId(page, rows, searchValue);
 		return result;
 	}
 	
-	//搜索
+	//根据产品名称查找
 	@RequestMapping("/search_work_by_workProduct")
 	@ResponseBody
-	public EUDataGridResult searchWorkByWorkProduct(Integer page, Integer rows, String searchValue) 
-			throws Exception{
+	public EUDataGridResult searchWorkByWorkProduct(Integer page, Integer rows, String searchValue) throws Exception{
 		EUDataGridResult result = workService.searchWorkByWorkProduct(page, rows, searchValue);
 		return result;
 	}
 	
-	//搜索
+	//根据设备id查找
 	@RequestMapping("/search_work_by_workDevice")
 	@ResponseBody
-	public EUDataGridResult searchWorkByWorkDevice(Integer page, Integer rows, String searchValue) 
-			throws Exception{
+	public EUDataGridResult searchWorkByWorkDevice(Integer page, Integer rows, String searchValue) throws Exception{
 		EUDataGridResult result = workService.searchWorkByWorkDevice(page, rows, searchValue);
 		return result;
 	}
 	
-	//搜索
+	//根据工序id查找
 	@RequestMapping("/search_work_by_workProcess")
 	@ResponseBody
-	public EUDataGridResult searchWorkByWorkProcess(Integer page, Integer rows, String searchValue) 
-			throws Exception{
+	public EUDataGridResult searchWorkByWorkProcess(Integer page, Integer rows, String searchValue) throws Exception{
 		EUDataGridResult result = workService.searchWorkByWorkProcess(page, rows, searchValue);
 		return result;
 	}
